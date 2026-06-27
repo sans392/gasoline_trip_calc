@@ -1,0 +1,26 @@
+<!doctype html><html lang='ru'><meta charset='utf-8'><title>Калькулятор</title>
+<style>body{font-family:Arial;max-width:760px;margin:24px}label{display:block;margin:10px 0}</style>
+<h2>Калькулятор времени поездки</h2>
+<label>Расстояние (км): <input id=d type=number value=1000></label>
+<label>Скорость: <input id=v type=range min=100 max=150 value=120 oninput="vs.value=value;calc()"><output id=vs>120</output> км/ч</label>
+<label>Расход при 100 км/ч (л/100 км): <input id=c100 type=number step=0.1 value=9></label>
+<label>Расход при 150 км/ч (л/100 км): <input id=c150 type=number step=0.1 value=11></label>
+<label>Время на 1 литр дозаправки (мин): <input id=mpl type=number step=0.1 value=1></label>
+<div id=r></div>
+<script>
+for(let id of ['d','c100','c150','mpl']) document.getElementById(id).oninput=calc;
+function calc(){
+ let D=+d.value,V=+v.value,C100=+c100.value,C150=+c150.value,M=+mpl.value;
+ let cons=C100+(V-100)*(C150-C100)/50;
+ let liters=D*cons/100;
+ let drive=D/V*60;
+ let fuel=liters*M;
+ let total=drive+fuel;
+ r.innerHTML=`<p>Расход: <b>${cons.toFixed(2)}</b> л/100 км</p>
+ <p>Топливо: <b>${liters.toFixed(1)}</b> л</p>
+ <p>Время движения: <b>${(drive/60).toFixed(2)}</b> ч</p>
+ <p>Дозаправка: <b>${fuel.toFixed(1)}</b> мин</p>
+ <h3>Общее время: ${(total/60).toFixed(2)} ч (${total.toFixed(1)} мин)</h3>`;
+}
+calc();
+</script>
